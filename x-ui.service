@@ -1,15 +1,15 @@
-[Unit]
-Description=x-ui Service
-After=network.target
-Wants=network.target
+#!/sbin/openrc-run
+name="x-ui"
+command="/usr/local/x-ui/x-ui"
+WORKING_DIR="/usr/local/x-ui/"
 
-[Service]
-Environment="XRAY_VMESS_AEAD_FORCED=false"
-Type=simple
-WorkingDirectory=/usr/local/x-ui/
-ExecStart=/usr/local/x-ui/x-ui
-Restart=on-failure
-RestartSec=5s
-
-[Install]
-WantedBy=multi-user.target
+start(){
+   cd $WORKING_DIR
+   start-stop-daemon --start --background --exec $command run
+}
+stop(){
+   start-stop-daemon --stop --exec $command
+}
+depend(){
+   need networking
+}
